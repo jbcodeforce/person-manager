@@ -122,7 +122,7 @@
         <artifactId>frontend-maven-plugin</artifactId>
         <version>${version.frontend-maven-plugin}</version>
         <configuration>
-          <workingDirectory>webapp</workingDirectory>
+          <workingDirectory>ui</workingDirectory>
         </configuration>
       </plugin>
       <plugin>
@@ -139,7 +139,7 @@
               <outputDirectory>${basedir}/target/classes/META-INF/resources/</outputDirectory>
               <resources>
                 <resource>
-                  <directory>webapp/dist</directory>
+                  <directory>ui/dist</directory>
                   <filtering>false</filtering>
                 </resource>
               </resources>

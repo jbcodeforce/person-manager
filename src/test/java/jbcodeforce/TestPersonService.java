@@ -46,7 +46,7 @@ public class TestPersonService {
     @Test
     public void testParseInvite(){
         Meeting m = new Meeting("travel","Event storming recap");
-        m.invites = "Tania.Whitby@company.com, Jennifer.Seidenwurm@company.com, Jerome Boyer, Lawrence P Norcini, Sathish.Saravanan@company.com, Mark.Freeman@company.com, Dave.Hollander@company.com";
+        m.attendees = "Tania.Whitby@company.com, Jennifer.Seidenwurm@company.com, Jerome Boyer, Lawrence P Norcini, Sathish.Saravanan@company.com, Mark.Freeman@company.com, Dave.Hollander@company.com";
         String[] invites = m.splitAttendees();
         Assertions.assertNotNull(invites);
         Assertions.assertTrue(invites.length > 3);
