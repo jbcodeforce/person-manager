@@ -16,10 +16,10 @@ public class MeetingService {
     private Logger logger = Logger.getLogger(MeetingService.class);
 
     @Inject
-    private MeetingRepository meetingRepository;
+    public MeetingRepository meetingRepository;
     
     @Inject
-    PersonService personService;
+    public PersonService personService;
 
     public MeetingService() {
         super();

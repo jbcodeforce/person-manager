@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Person {
-    public String id;
+    public String _id;
+    public String _rev;
     public String firstname;
     public String lastname;
     public String email;
@@ -13,23 +14,25 @@ public class Person {
     public String role;
     public String creationDate;
     public String updateDate;
-    public List<String> skills;
-    public List<String> helpNeeds;
-    public List<String> contexts;
+    public List<Item> skills;
+    public List<Item> needs;
+    public List<Item> contexts;
 
     public Person(){
-        skills = new ArrayList<String>();
-        helpNeeds = new ArrayList<String>();
-        contexts =  new ArrayList<String>();
+        init();
     }
     
     public Person(String email, String fn, String ln) {
         this.email = email;
         this.firstname = fn;
         this.lastname = ln;
-        skills = new ArrayList<String>();
-        helpNeeds = new ArrayList<String>();
-        contexts =  new ArrayList<String>();
+        init();
+    }
+
+    public void init(){
+        skills = new ArrayList<Item>();
+        needs = new ArrayList<Item>();
+        contexts =  new ArrayList<Item>();
     }
 
     public String toString(){

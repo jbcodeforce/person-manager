@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 
@@ -13,7 +14,9 @@ import jbcodeforce.app.person.infrastructure.PersonRepository;
 public class PersonService {
     private Logger logger = Logger.getLogger(PersonService.class);
 
-
+    @Inject
+    PersonRepository personRepository;
+    
     public PersonService() {
         super();
     }
@@ -82,8 +85,8 @@ public class PersonService {
 
 	public void updateInvitedPersonContext(String[] attendees,String meetingContext) {
         for (Person attendee : buildInvitedPersonList(attendees)) {
-            attendee.contexts.add(meetingContext);
-            PersonRepository.save(attendee);
+            attendee.contexts.add(new Item(0,meetingContext));
+            personRepository.save(attendee);
         };
 	}
 

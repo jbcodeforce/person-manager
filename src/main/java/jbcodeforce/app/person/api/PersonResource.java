@@ -21,6 +21,8 @@ public class PersonResource {
     @Inject
     PersonRepository personRepository;
 
+    public PersonResource(){}
+    
     @GET
     @Path("hello")
     @Produces(MediaType.TEXT_PLAIN)

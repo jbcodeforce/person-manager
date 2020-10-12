@@ -19,7 +19,9 @@ import jbcodeforce.app.person.domain.MeetingService;
 public class MeetingResource {
     
     @Inject
-    private MeetingService meetingService;
+    public MeetingService meetingService;
+    
+    public MeetingResource(){}
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)

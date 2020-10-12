@@ -15,10 +15,7 @@ import jbcodeforce.app.person.domain.Meeting;
 @ApplicationScoped
 public class MeetingRepository {
 
-    @Inject
-    io.vertx.mutiny.pgclient.PgPool client;
-    @Inject
-    @ConfigProperty(name = "app.schema.create", defaultValue = "true")
+    @ConfigProperty(name = "app.db.create", defaultValue = "true")
     boolean schemaCreate;
     
     static HashMap<String,Meeting> meetings = new HashMap<String,Meeting>();;

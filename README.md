@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* Present a list of persons active in a table format
+* Present a list of the active  persons in a table format, sortable by name
 * Present a button to enter meeting information like customer, purpose, attendees
 
 ## Running the application in dev mode
