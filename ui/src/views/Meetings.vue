@@ -90,11 +90,14 @@ export default {
     dialog: false,
     editedIndex: -1,
     editedItem: {
+      _id: "",
+      _rev: "",
       title: "",
       customer: "",
       context: "",
       creationDate: "",
       attendees: "",
+      todos: [],
       active: true,
     },
     defaultItem: {

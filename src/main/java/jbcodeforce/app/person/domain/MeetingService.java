@@ -26,7 +26,7 @@ public class MeetingService {
     }
 
 	public Multi<Meeting> getActiveMeetings() {
-		return meetingRepository.getActiveMeetings();
+		return Multi.createFrom().items(meetingRepository.getActiveMeetings().stream());
 	}
 
     /**

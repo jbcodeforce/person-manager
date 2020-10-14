@@ -1,17 +1,17 @@
 package jbcodeforce.app.person.domain;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Meeting {
-    public String id;
+    public String _id;
+    public String _rev;
     public String title;
     public String creationDate;
     public String updateDate;
     public String attendees;
     public String context;
     public String customer;
+    public List<Item> todos;
     public boolean active=true;
 
     public Meeting(){}

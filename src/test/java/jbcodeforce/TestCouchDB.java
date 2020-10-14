@@ -1,5 +1,6 @@
 package jbcodeforce;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,6 +44,13 @@ public class TestCouchDB {
         Person out = repo.save(bk);
         System.out.println("You have inserted the document");
         System.out.println(out);
+    }
+
+    @Test
+    public void getAllDocuments() {
+
+        List<Person> out = repo.getPersons();
+        out.stream().peek( p -> System.out.println(p.toString()));
     }
 
 }

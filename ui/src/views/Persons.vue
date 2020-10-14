@@ -88,13 +88,22 @@
                     <v-row>
                       <v-col cols="12">
                         <p>Contexts</p>
+
+                               <!--
+                              
+                       -->
+
                         <card-list v-model="editedItem.contexts" #default="{ item }">
                           <v-row>
                             <v-col cols="12">
-                              <v-text-field v-model="item.text" label="Context" hide-details />
+                               <vue-editor v-model="item.text"></vue-editor>
+                                <!--
+                                <v-text-field v-model="item.text" label="Need" hide-details />
+                                -->
                             </v-col>
                           </v-row>
                         </card-list>
+                        
                       </v-col>
                     </v-row>
                     <v-row>
@@ -156,13 +165,18 @@
 <script>
 import axios from "axios";
 import CardList from "./CardList";
+import { VueEditor } from "vue2-editor"
+
+let backendURL = "/api/v1/persons"
 
 export default {
   components: {
     CardList,
+    VueEditor
   },
   data: () => ({
     dialog: false,
+    context: '',
     persons: [],
     needs: [
       {
@@ -191,6 +205,8 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
+      _id: "",
+      _rev: "",
       lastname: "",
       firstname: "",
       email: "",
@@ -212,7 +228,6 @@ export default {
       needs: [],
       contexts: [],
     },
-    newContext: "",
   }),
   watch: {
     dialog(val) {
@@ -229,8 +244,7 @@ export default {
   },
   methods: {
     initialize() {
-      axios.get("/api/v1/persons").then((resp) => (this.persons = resp.data));
-      console.log(this.persons);
+      axios.get(backendURL).then((resp) => (this.persons = resp.data));
     },
     addNeed() {
       this.editedItem.needs.push({ id: this.needCounter++,text:"new need" });
@@ -253,6 +267,7 @@ export default {
       const index = this.persons.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
         this.persons.splice(index, 1);
+      axios.delete(backendURL)
     },
     close() {
       this.dialog = false;
@@ -260,8 +275,14 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      console.log(this.editedItem)
     },
     save() {
+      if (this.editedItem._rev !== null) {
+        axios.put(backendURL,this.editedItem).then((resp) => (this.editedItem = resp.data));
+      } else {
+        axios.post(backendURL,this.editedItem).then((resp) => (this.editedItem = resp.data));
+      }
       if (this.editedIndex > -1) {
         Object.assign(this.persons[this.editedIndex], this.editedItem);
       } else {
