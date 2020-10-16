@@ -176,7 +176,6 @@ export default {
   },
   data: () => ({
     dialog: false,
-    context: '',
     persons: [],
     needs: [
       {

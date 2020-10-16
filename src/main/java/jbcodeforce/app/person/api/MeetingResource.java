@@ -3,12 +3,15 @@ package jbcodeforce.app.person.api;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -47,5 +50,11 @@ public class MeetingResource {
         return Uni.createFrom().item(meetingRepository.update(meeting));
     }
 
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Uni<String> deleteMeeting(Meeting meeting) {
+        return Uni.createFrom().item(meetingRepository.delete(meeting));
+    }
 
 }

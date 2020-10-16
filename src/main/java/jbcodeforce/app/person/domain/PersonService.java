@@ -85,8 +85,15 @@ public class PersonService {
 
 	public void updateInvitedPersonContext(String[] attendees,String meetingContext) {
         for (Person attendee : buildInvitedPersonList(attendees)) {
-            attendee.contexts.add(new Item(0,meetingContext));
-            personRepository.save(attendee);
+            // TO DO verify the user does not exist
+            List<Person> existingUsers = personRepository.getPersonByName(attendee.firstname,attendee.lastname);
+            if (existingUsers == null) {
+                attendee.contexts.add(new Item(0,meetingContext));
+                personRepository.save(attendee);
+            } else {
+                
+            }
+            
         };
 	}
 

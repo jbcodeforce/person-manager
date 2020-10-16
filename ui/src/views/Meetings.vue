@@ -40,21 +40,25 @@
                       </v-col>
                     </v-row>
                     <v-row>
+                      <p>Context</p>
                       <v-col cols="12" sm="8" md="12">
-                        <v-textarea
-                          filled
-                          v-model="editedItem.context"
-                          label="Meeting Context"
-                        ></v-textarea>
+                        <vue-editor v-model="editedItem.context"></vue-editor>
                       </v-col>
                     </v-row>
                     <v-row>
+                      <p>Attendees</p>
                       <v-col cols="12" sm="8" md="12">
                         <v-textarea
                           filled
                           v-model="editedItem.attendees"
                           label="Attendees"
                         ></v-textarea>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <p>Notes</p>
+                      <v-col cols="12" sm="8" md="12">
+                        <vue-editor v-model="editedItem.notes"></vue-editor>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -81,10 +85,17 @@
     </v-col>
   </v-row>
 </template>
+
 <script>
+import { VueEditor } from "vue2-editor"
 import axios from "axios";
-let url = "/api/v1/meetings";
+
+let backendURL = "/api/v1/meetings";
+
 export default {
+  components:{
+    VueEditor
+  },
   data: () => ({
     meetings: [],
     dialog: false,
@@ -95,6 +106,7 @@ export default {
       title: "",
       customer: "",
       context: "",
+      notes: "",
       creationDate: "",
       attendees: "",
       todos: [],
@@ -104,7 +116,7 @@ export default {
       title: "",
       customer: "",
       context: "",
-      creationDate: "",
+      notes:"",
       attendees: "",
       active: true,
     },
@@ -151,7 +163,7 @@ export default {
   },
   methods: {
     initialize() {
-      axios.get(url).then((resp) => (this.meetings = resp.data));
+      axios.get(backendURL).then((resp) => (this.meetings = resp.data));
     },
     editItem(item) {
       this.editedIndex = this.meetings.indexOf(item);
@@ -161,7 +173,8 @@ export default {
     deleteItem(item) {
       const index = this.meetings.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.meetings.splice(index, 1);
+      this.meetings.splice(index, 1);
+      axios.delete(backendURL,item)
     },
     close() {
       this.dialog = false;
@@ -171,8 +184,17 @@ export default {
       });
     },
     save() {
-      axios
-        .post(url, this.editedItem)
+       if (this.editedItem._rev !== null) {
+        axios.put(backendURL,this.editedItem)
+        .then((resp) => {
+            console.log(resp);
+            this.editedItem = resp.data
+          }).catch(function (error) {
+          console.log(error);
+        });
+      } else {
+        axios
+        .post(backendURL, this.editedItem)
         .then(function (response) {
           console.log(response);
           this.editedItem = response.data;
@@ -181,6 +203,7 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+      }
       if (this.editedIndex > -1) {
           Object.assign(this.meetings[this.editedIndex], this.editedItem);
       } else {

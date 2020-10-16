@@ -1,5 +1,8 @@
 package jbcodeforce.app.person.infrastructure;
 
+import static com.cloudant.client.api.query.Operation.and;
+import static com.cloudant.client.api.query.Expression.eq;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +16,8 @@ import javax.enterprise.context.ApplicationScoped;
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
+import com.cloudant.client.api.query.QueryBuilder;
+import com.cloudant.client.api.query.QueryResult;
 import com.cloudant.client.api.views.AllDocsResponse;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -105,5 +110,17 @@ public class PersonRepository {
 
 	public void shutdown() {
         client.shutdown();
+	}
+
+	public List<Person> getPersonByName(String firstname, String lastname) {
+        try {
+            QueryResult<Person> persons = db.query(new QueryBuilder(
+                    and(eq("firtname", firstname),eq("lastname",lastname))).
+                build(), Person.class);
+           return persons.getDocs();
+          } catch(Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
 	}
 }

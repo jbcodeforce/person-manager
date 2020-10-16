@@ -1,13 +1,10 @@
 package jbcodeforce.app.person.domain;
 
-import java.util.List;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jbcodeforce.app.person.infrastructure.MeetingRepository;
 
@@ -25,9 +22,6 @@ public class MeetingService {
         super();
     }
 
-	public Multi<Meeting> getActiveMeetings() {
-		return Multi.createFrom().items(meetingRepository.getActiveMeetings().stream());
-	}
 
     /**
      * Save meeting and process the invited persons with person service

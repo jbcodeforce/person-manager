@@ -13,10 +13,14 @@ import javax.enterprise.context.ApplicationScoped;
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
+import com.cloudant.client.api.query.QueryBuilder;
+import com.cloudant.client.api.query.QueryResult;
 import com.cloudant.client.api.views.AllDocsResponse;
+import static com.cloudant.client.api.query.Expression.eq;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import io.vertx.core.json.JsonObject;
 import jbcodeforce.app.person.domain.Meeting;
 
 @ApplicationScoped
@@ -72,9 +76,13 @@ public class MeetingRepository {
     
     public List<Meeting> getActiveMeetings(){
         try {
-            AllDocsResponse resp= db.getAllDocsRequestBuilder().includeDocs(true).build().getResponse();
-            return resp.getDocsAs(Meeting.class);
-          } catch(IOException e) {
+            QueryResult<Meeting> meetings = db.query(new QueryBuilder(
+                    eq("active", true)).
+                build(), Meeting.class);
+           // AllDocsResponse resp= db.getAllDocsRequestBuilder().includeDocs(true).build().getResponse();
+           // return resp.getDocsAs(Meeting.class);
+           return meetings.getDocs();
+          } catch(Exception e) {
             System.err.println(e.getMessage());
             return new ArrayList<Meeting>();
         }
@@ -103,5 +111,17 @@ public class MeetingRepository {
 
 	public void shutdown() {
         client.shutdown();
+	}
+
+	public String delete(Meeting meeting) {
+		try {
+            meeting.updateDate = LocalDate.now().toString();
+            meeting.active = false;
+            db.update(meeting);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "Failure";
+        }
+        return "Success";
 	}
 }
