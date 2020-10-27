@@ -13,11 +13,11 @@
           Home
         </v-btn>
          <v-btn to="/persons" text>
-          <v-icon left>mdi-person</v-icon>
+          <v-icon left>mdi-account-supervisor</v-icon>
           Persons
         </v-btn>
          <v-btn to="/meetings" text>
-          <v-icon left>mdi-groups</v-icon>
+          <v-icon left>mdi-card-account-details-outline</v-icon>
           Meeting
         </v-btn>
     </v-app-bar>

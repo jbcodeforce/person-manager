@@ -1,6 +1,8 @@
 ui/dist/
 ui/node_modules/
 
+.env
+
 # Eclipse
 .project
 .classpath

@@ -1,4 +1,4 @@
-package jbcodeforce;
+package jbcodeforce.it;
 
 import io.quarkus.test.junit.NativeImageTest;
 

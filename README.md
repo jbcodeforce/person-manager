@@ -2,26 +2,32 @@
 
 ## Requirements
 
-* Present a list of the active  persons in a table format, sortable by name
-* Present a button to enter meeting information like customer, purpose, attendees
+* Present a list of the active persons in a table format, sortable by name
+* Present a button to enter meeting information like customer, purpose, attendees and track items to do
+
 
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
 
 ```
-# Start 
+# Start compose in repo above.
 docker-compose up
+# start app in development mode
 ./mvnw quarkus:dev
 ```
 
 ## Packaging and running the application
 
-The application can be packaged using `./mvnw package`.
+The application can be packaged using `./mvnw package -DskipTests`.
 It produces the `person-manager-1.0.0-SNAPSHOT-runner.jar` file in the `/target` directory.
 Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
 
 The application is now runnable using `java -jar target/person-manager-1.0.0-SNAPSHOT-runner.jar`.
+
+## Build the image
+
+## Deploy via knative
 
 ## Creating a native executable
 

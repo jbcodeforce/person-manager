@@ -36,6 +36,13 @@ public class MeetingResource {
         return Multi.createFrom().items(meetingRepository.getActiveMeetings().stream());
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Uni<Meeting> getMeetingById(@PathParam String id){
+        return Uni.createFrom().item(meetingRepository.getById(id));
+    }
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

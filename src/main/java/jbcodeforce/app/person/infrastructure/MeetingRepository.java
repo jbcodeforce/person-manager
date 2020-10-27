@@ -1,10 +1,14 @@
 package jbcodeforce.app.person.infrastructure;
 
-import java.io.IOException;
+import static com.cloudant.client.api.query.Expression.eq;
+import static com.cloudant.client.api.query.Expression.regex;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,12 +19,10 @@ import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.cloudant.client.api.query.QueryBuilder;
 import com.cloudant.client.api.query.QueryResult;
-import com.cloudant.client.api.views.AllDocsResponse;
-import static com.cloudant.client.api.query.Expression.eq;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import io.vertx.core.json.JsonObject;
+import jbcodeforce.app.person.domain.Customer;
 import jbcodeforce.app.person.domain.Meeting;
 
 @ApplicationScoped
@@ -92,6 +94,7 @@ public class MeetingRepository {
 	public Meeting save(Meeting meeting) {    
         if (meeting._rev == null) {
             meeting.creationDate = LocalDate.now().toString();
+            meeting._id=meeting.title + meeting.creationDate;
             db.save(meeting);
         } else {
             return update(meeting);
@@ -123,5 +126,33 @@ public class MeetingRepository {
             return "Failure";
         }
         return "Success";
+	}
+
+	public Meeting getById(String id) {
+        if (id == null) return null;
+        return db.find(Meeting.class,id);
+	}
+
+	public Collection<Customer> findCustomer(String name) {
+        HashMap<String,Customer> retrievedCustomers = new HashMap<String,Customer>();
+        try {
+            QueryResult<Meeting> meetings = db.query(new QueryBuilder(
+                    regex("customer", name)).
+                build(), Meeting.class);
+           // AllDocsResponse resp= db.getAllDocsRequestBuilder().includeDocs(true).build().getResponse();
+           // return resp.getDocsAs(Meeting.class);
+           for (Meeting m : meetings.getDocs()) {
+             if (! retrievedCustomers.containsKey(m.customer)) {
+                Customer c = new Customer(m.customer);
+                retrievedCustomers.put(m.customer,c);
+                c.meetings.add(m);
+             } else {
+                retrievedCustomers.get(m.customer).meetings.add(m);
+             }
+           };
+          } catch(Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return retrievedCustomers.values();
 	}
 }

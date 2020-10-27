@@ -1,7 +1,8 @@
 package jbcodeforce.app.person.infrastructure;
 
-import static com.cloudant.client.api.query.Operation.and;
 import static com.cloudant.client.api.query.Expression.eq;
+import static com.cloudant.client.api.query.Expression.regex;
+import static com.cloudant.client.api.query.Operation.and;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,6 +17,7 @@ import javax.enterprise.context.ApplicationScoped;
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
+import com.cloudant.client.api.model.Response;
 import com.cloudant.client.api.query.QueryBuilder;
 import com.cloudant.client.api.query.QueryResult;
 import com.cloudant.client.api.views.AllDocsResponse;
@@ -28,49 +30,43 @@ import jbcodeforce.app.person.domain.Person;
 public class PersonRepository {
 
     @ConfigProperty(name = "app.db.create", defaultValue = "true")
-    boolean dbCreate;
+    public boolean dbCreate;
 
     @ConfigProperty(name = "app.datasource.url")
-    String dbURL;
+    public String dbURL;
 
     @ConfigProperty(name = "app.datasource.db.person.name")
-    String dbName;
+    public String dbName;
 
     @ConfigProperty(name = "app.datasource.username")
-    String dbUserName;
+    public String dbUserName;
 
     @ConfigProperty(name = "app.datasource.password")
-    String dbPassword;
+    public String dbPassword;
+
+    @ConfigProperty(name= "app.datasource.iam.apikey")
+    public String iamApiKey;
 
     public CloudantClient client;
     private Database db;
 
     public PersonRepository() {
     }
- 
-    public List<Person> getPersons() {
-        try {
-            AllDocsResponse resp= db.getAllDocsRequestBuilder().includeDocs(true).build().getResponse();
-            return resp.getDocsAs(Person.class);
-          } catch(IOException e) {
-            System.err.println(e.getMessage());
-            return new ArrayList<Person>();
-        }
-       
-    }
+
 
     @PostConstruct
-    void config() {
+    public void init() {
         try {
-            client = ClientBuilder.url(new URL(dbURL))
-            .username(dbUserName)
-            .password(dbPassword)
-            .build();
+            if (iamApiKey == null || iamApiKey.isEmpty() ) {
+                client = ClientBuilder.url(new URL(dbURL)).username(dbUserName).password(dbPassword).build();    
+            } else {
+                client = ClientBuilder.url(new URL(dbURL)).iamApiKey(iamApiKey).build();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            return ;
+            return;
         }
- 
+
         if (dbCreate) {
             initdb();
         }
@@ -83,44 +79,86 @@ public class PersonRepository {
             System.err.println(e.getMessage());
             System.err.println("Continue with existing DB");
         }
-         db = client.database(dbName, false);
+        db = client.database(dbName, false);
     }
 
-	public Person save(Person person) {
+
+    public void shutdown() {
+        client.shutdown();
+    }
+
+    public Person save(Person person) {
         if (person._rev == null) {
+            if (person.email != null) {
+                person._id = person.email;
+            } else {
+                person._id = person.firstname + "_" + person.lastname;
+            }
             person.creationDate = LocalDate.now().toString();
-            db.save(person);
+            Response rep = db.save(person);
+            person._rev = rep.getRev();
+            person._id = rep.getId();
         } else {
-            person.updateDate = LocalDate.now().toString();  
-            db.update(person);
+            person.updateDate = LocalDate.now().toString();
+            Response rep = db.update(person);
+            person._rev = rep.getRev();
         }
         return person;
     }
-    
+
     public Person update(Person person) {
         if (person._rev == null) {
             person.creationDate = LocalDate.now().toString();
             db.save(person);
         } else {
-            person.updateDate = LocalDate.now().toString();  
+            person.updateDate = LocalDate.now().toString();
             db.update(person);
         }
         return person;
-	}
+    }
 
-	public void shutdown() {
-        client.shutdown();
-	}
-
-	public List<Person> getPersonByName(String firstname, String lastname) {
+    public List<Person> getPersons() {
         try {
-            QueryResult<Person> persons = db.query(new QueryBuilder(
-                    and(eq("firtname", firstname),eq("lastname",lastname))).
-                build(), Person.class);
-           return persons.getDocs();
-          } catch(Exception e) {
+            AllDocsResponse resp = db.getAllDocsRequestBuilder().includeDocs(true).build().getResponse();
+            return resp.getDocsAs(Person.class);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return new ArrayList<Person>();
+        }
+
+    }
+    
+
+    public List<Person> getPersonByName(String firstname, String lastname) {
+        try {
+            QueryResult<Person> persons = db.query(
+                    new QueryBuilder(and(eq("firstname", firstname), eq("lastname", lastname))).build(), Person.class);
+            return persons.getDocs();
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
         }
+    }
+
+    public Person getPersonById(String id) {
+        try {
+            return db.find(Person.class, id);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+	public List<Person> getPersonsBySkill(String skillSearch) {
+        try {
+            skillSearch = skillSearch.toLowerCase();
+            QueryResult<Person> persons = db.query(
+                    new QueryBuilder(regex("skills", skillSearch)).build(), Person.class);
+            return persons.getDocs();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    
 	}
 }

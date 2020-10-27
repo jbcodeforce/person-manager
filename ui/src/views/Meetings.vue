@@ -30,12 +30,14 @@
                         <v-text-field
                           v-model="editedItem.customer"
                           label="Customer"
+                          required
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
                           v-model="editedItem.title"
                           label="Meeting Title"
+                          required
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -50,6 +52,7 @@
                       <v-col cols="12" sm="8" md="12">
                         <v-textarea
                           filled
+                          required
                           v-model="editedItem.attendees"
                           label="Attendees"
                         ></v-textarea>

@@ -12,6 +12,7 @@ public class Person {
     public String organization;
     public String company;
     public String role;
+    public String location;
     public String creationDate;
     public String updateDate;
     public List<Item> skills;
