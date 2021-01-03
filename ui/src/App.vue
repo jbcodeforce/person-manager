@@ -20,6 +20,10 @@
           <v-icon left>mdi-card-account-details-outline</v-icon>
           Meeting
         </v-btn>
+         <v-btn to="/projects" text>
+          <v-icon left>mdi-card-account-details-outline</v-icon>
+          Project
+        </v-btn>
     </v-app-bar>
 
      <v-main>

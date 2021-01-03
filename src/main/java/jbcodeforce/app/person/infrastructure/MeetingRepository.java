@@ -42,6 +42,9 @@ public class MeetingRepository {
 
     @ConfigProperty(name = "app.datasource.password")
     String dbPassword;
+    
+    @ConfigProperty(name= "app.datasource.iam.apikey")
+    public String iamApiKey;
 
     public CloudantClient client;
     private Database db;
@@ -52,14 +55,16 @@ public class MeetingRepository {
     @PostConstruct
     void config() {
         try {
-            client = ClientBuilder.url(new URL(dbURL))
-            .username(dbUserName)
-            .password(dbPassword)
-            .build();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return ;
-        }
+            if (iamApiKey == null || iamApiKey.isEmpty() ) {
+                    client = ClientBuilder.url(new URL(dbURL)).username(dbUserName).password(dbPassword).build();    
+                } else {
+                    client = ClientBuilder.account(dbUserName).iamApiKey(iamApiKey).build();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return;
+            }
+      
  
         if (dbCreate) {
             initdb();

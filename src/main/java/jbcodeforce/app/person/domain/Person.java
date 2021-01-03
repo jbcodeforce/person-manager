@@ -3,10 +3,20 @@ package jbcodeforce.app.person.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+
+@Indexed
 public class Person {
     public String _id;
     public String _rev;
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "firstname_sort", sortable = Sortable.YES, normalizer = "sort")
     public String firstname;
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "lastname_sort", sortable = Sortable.YES, normalizer = "sort")
     public String lastname;
     public String email;
     public String organization;

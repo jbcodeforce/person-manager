@@ -2,6 +2,9 @@ package jbcodeforce.app.person.domain;
 
 import java.util.List;
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+
+@Indexed
 public class Meeting {
     public String _id;
     public String _rev;

@@ -60,7 +60,7 @@ public class PersonRepository {
             if (iamApiKey == null || iamApiKey.isEmpty() ) {
                 client = ClientBuilder.url(new URL(dbURL)).username(dbUserName).password(dbPassword).build();    
             } else {
-                client = ClientBuilder.url(new URL(dbURL)).iamApiKey(iamApiKey).build();
+                client = ClientBuilder.account(dbUserName).iamApiKey(iamApiKey).build();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

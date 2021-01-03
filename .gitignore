@@ -2,6 +2,9 @@ ui/dist/
 ui/node_modules/
 
 .env
+src/main/kubernetes/secrets.yaml
+src/main/kubernetes/configmap.yaml
+src/test/java/jbcodeforce/it/TestCloudantAccess.java
 
 # Eclipse
 .project

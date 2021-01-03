@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>jbcodeforce.app</groupId>
   <artifactId>person-manager</artifactId>
@@ -11,10 +12,11 @@
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus-plugin.version>1.8.1.Final</quarkus-plugin.version>
+    <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>1.8.1.Final</quarkus.platform.version>
+    <quarkus.platform.version>1.10.5.Final</quarkus.platform.version>
+    <quarkus.hibernate-search-orm.elasticsearch.version>1.10.5-Final</quarkus.hibernate-search-orm.elasticsearch.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <version.frontend-maven-plugin>1.10.0</version.frontend-maven-plugin>
     <version.resources-plugin>3.2.0</version.resources-plugin>
@@ -64,7 +66,6 @@
       <artifactId>cloudant-client</artifactId>
       <version>2.19.1</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.couchbase.client/java-client -->
     <dependency>
       <groupId>com.couchbase.client</groupId>
       <artifactId>java-client</artifactId>
@@ -91,6 +92,10 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-search-orm-elasticsearch</artifactId>
     </dependency>
   </dependencies>
   <build>

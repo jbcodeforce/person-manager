@@ -73,7 +73,7 @@
                     </v-row>
                        <v-row>
                       <v-col cols="12">
-                        <p>Skills</p>
+                        <h3>Skills</h3>
                         <card-list v-model="editedItem.skills" #default="{ item }">
                           <v-row>
                             <v-col cols="12">
@@ -93,7 +93,7 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12">
-                        <p>Contexts</p>
+                        <h3>Contexts</h3>
 
                                <!--
                               
@@ -122,7 +122,7 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12">
-                        <p>Needs</p>
+                        <h3>Needs</h3>
                         <card-list v-model="editedItem.needs" #default="{ item }">
                           <v-row>
                             <v-col cols="12">

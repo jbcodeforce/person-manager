@@ -1,17 +1,27 @@
 # Person-manager project
 
+Manage persons as part of professional network to assess how to help or the context of work together.
+
 ## Requirements
 
 * Present a list of the active persons in a table format, sortable by name
-* Present a button to enter meeting information like customer, purpose, attendees and track items to do
+* Present a button to enter meeting information like customer, purpose, attendees and track to do items.
+* Search on meeting context, customer name, person name
+* Update meeting / project to add more info
+
+## Techno stack
+
+* Cloudant: local or as a service on IBM Cloud
+* Quarkus Panache, Resteasy
+* UI in Vue.js
 
 
 ## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+Run the application in dev mode which enables live coding using:
 
 ```
-# Start compose in repo above.
+# Start compose from parent directory
 docker-compose up
 # start app in development mode
 ./mvnw quarkus:dev
@@ -25,7 +35,11 @@ Be aware that it’s not an _über-jar_ as the dependencies are copied into the 
 
 The application is now runnable using `java -jar target/person-manager-1.0.0-SNAPSHOT-runner.jar`.
 
-## Build the image
+## Build the image locally
+
+```
+
+```
 
 ## Deploy via knative
 
